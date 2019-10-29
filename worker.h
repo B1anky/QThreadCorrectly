@@ -14,21 +14,31 @@ class Worker : public QObject{
 
 public:
 
-    Worker(QObject* parent = nullptr);
+    Worker(QVector<char>* job, QObject* parent = nullptr) : QObject(parent), m_elements(job){
+    }
 
-    void work();
+    virtual void work() = 0;
 
 public slots:
 
-    void setup(QThread* thread, QString id);
+    virtual void setup(QThread* thread, QString id){
+        m_id = id;
+
+        connect(thread, &QThread::started, this,   &Worker::work,  Qt::DirectConnection);
+        connect(this,   &Worker::finished, thread, &QThread::exit, Qt::DirectConnection);
+    }
 
 signals:
+
     void finished(int);
 
-private:
+    void started();
 
-    QVector<int> m_elements;
-    QString      m_id;
+protected:
+
+    QVector<char>* m_elements;
+    QString        m_id;
+
 };
 
 #endif // WORKER_H

@@ -26,10 +26,17 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-    worker.cpp
+    sorterworker.cpp \
+    randomizerworker.cpp \
+    workernetwork.cpp \
+    generatorworker.cpp
 
 HEADERS += \
-    worker.h
+    worker.h \
+    sorterworker.h \
+    randomizerworker.h \
+    workernetwork.h \
+    generatorworker.h
 
 FORMS +=
 
