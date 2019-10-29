@@ -4,6 +4,17 @@
 #include <QCheckBox>
 #include <QPushButton>
 
+void setupConnections(QThread* thread, Worker* worker, QCheckBox* checkbox, QPushButton* button){
+    QObject::connect(button, &QPushButton::clicked, checkbox, [=](){
+        if(checkbox->isChecked() && !thread->isRunning()){
+            thread->start();
+        }else{
+            qDebug() << "Program should be stalling";
+            worker->work();
+        }
+    }, Qt::DirectConnection);
+}
+
 int main(int argc, char *argv[]){
     QApplication a(argc, argv);
 
@@ -31,27 +42,8 @@ int main(int argc, char *argv[]){
     worker2->setup(thread2, "2");
     worker2->moveToThread(thread2);
 
-    qDebug() << thread1->idealThreadCount();
-
-    QObject::connect(sortButton1, &QPushButton::clicked, threadedCheckBox, [=](){
-        if(threadedCheckBox->isChecked() && !thread1->isRunning()){
-            thread1->start();
-        }else{
-            qDebug() << "Program should be stalling";
-            worker1->work();
-        }
-    }, Qt::DirectConnection);
-
-    QObject::connect(sortButton2, &QPushButton::clicked, threadedCheckBox, [=](){
-        if(threadedCheckBox->isChecked() && !thread2->isRunning()){
-            thread2->start();
-        }else{
-            qDebug() << "Program should be stalling";
-            worker2->work();
-        }
-    }, Qt::DirectConnection);
+    setupConnections(thread1, worker1, threadedCheckBox, sortButton1);
+    setupConnections(thread2, worker2, threadedCheckBox, sortButton2);
 
     return a.exec();
 }
-
-
