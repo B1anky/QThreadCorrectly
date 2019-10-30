@@ -13,6 +13,10 @@ public:
 
     void work() override;
 
+public slots:
+
+    virtual void setup(QThread* thread, QString id) override;
+
 };
 
 #endif // GENERATORWORKER_H

@@ -24,13 +24,13 @@ public slots:
 
     void createNewWorker();
 
-protected:
-
-    int                   m_workers;
+protected:    
 
     QHBoxLayout* m_mainHBoxLayout;
     QCheckBox*   m_threadedCheckBox;
     QPushButton* m_addNewWorkersButton;
+
+    int          m_workers;
 
 };
 
